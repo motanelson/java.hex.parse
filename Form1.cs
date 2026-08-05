@@ -112,34 +112,26 @@ namespace shells
             String ss = "";
             int a = 0;
             String args = "";
-            try
 
+            for (int i = 0; i < s.Length; i++)
             {
-                for (int i = 0; i < s.Length; i++)
-                {
-                    s[i] = s[i].Trim();
-                    s[i] = s[i].Replace("\n", "");
-                    textBox2.Text = textBox2.Text + s[i] + "\r\n";
-                    args = s[i];
-                    if (s[i] != "") Process.Start(s[i]);
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-                a = 1;
-                ss = ex.Message + "\r\n";
-
-
-
-            }
-            if (a == 1)
-            {
-
+                s[i] = s[i].Trim();
+                s[i] = s[i].Replace("\n", "");
+                textBox2.Text = textBox2.Text + s[i] + "\r\n";
+                args = s[i];
                 try
                 {
+                    if (s[i] != "") Process.Start(s[i]);
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+
+
                     // Configure the process start info
                     ProcessStartInfo psi = new ProcessStartInfo
                     {
@@ -163,20 +155,18 @@ namespace shells
 
                         // Display results
 
-                        Console.WriteLine(output);
-                        Console.WriteLine(errors);
+                        textBox2.Text = textBox2.Text + output + "\n";
+                        textBox2.Text = textBox2.Text + errors + "\n";
 
                     }
+
                 }
-
-                catch (Exception ex)
-                {
-                    a = 0;
-                    Console.WriteLine(ex.Message.ToString());
-                }
-
-
             }
+                
+                
+
+
+            
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
