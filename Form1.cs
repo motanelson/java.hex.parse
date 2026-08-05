@@ -108,26 +108,75 @@ namespace shells
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String[] s =textBox1.Text.Split('\n');
+            String[] s = textBox1.Text.Split('\n');
+            String ss = "";
+            int a = 0;
+            String args = "";
             try
 
             {
                 for (int i = 0; i < s.Length; i++)
                 {
                     s[i] = s[i].Trim();
-                    s[i] = s[i].Replace("\n","");
-                    textBox2.Text=textBox2.Text + s[i]+"\r\n";
-                    if (s[i]!="")Process.Start(s[i]);
+                    s[i] = s[i].Replace("\n", "");
+                    textBox2.Text = textBox2.Text + s[i] + "\r\n";
+                    args = s[i];
+                    if (s[i] != "") Process.Start(s[i]);
                 }
-                
+
 
             }
             catch (Exception ex)
             {
-                textBox2.Text=textBox2.Text + ex.Message+"\r\n";
-            }
-                
 
+                a = 1;
+                ss = ex.Message + "\r\n";
+
+
+
+            }
+            if (a == 1)
+            {
+
+                try
+                {
+                    // Configure the process start info
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",              // Run CMD
+                        Arguments = "/c " + args,       // /c = run command and exit
+                        RedirectStandardOutput = true,     // Capture output
+                        RedirectStandardError = true,      // Capture errors
+                        UseShellExecute = false,           // Required for redirection
+                        CreateNoWindow = true              // Hide CMD window
+                    };
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo = psi;
+                        process.Start();
+
+                        // Read the output and errors
+                        string output = process.StandardOutput.ReadToEnd();
+                        string errors = process.StandardError.ReadToEnd();
+
+                        process.WaitForExit();
+
+                        // Display results
+
+                        Console.WriteLine(output);
+                        Console.WriteLine(errors);
+
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    a = 0;
+                    Console.WriteLine(ex.Message.ToString());
+                }
+
+
+            }
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
